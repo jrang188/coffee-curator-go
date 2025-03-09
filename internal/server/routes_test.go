@@ -29,15 +29,23 @@ func TestHelloWorldHandler(t *testing.T) {
 }
 
 func TestEntries(t *testing.T) {
+	s := &server.Server{}
 	t.Run("returns the journal entry with ID 1", func(t *testing.T) {
 		req, _ := http.NewRequest(http.MethodGet, "/entries/1", nil)
 		res := httptest.NewRecorder()
 
-		s := &server.Server{}
 		s.RegisterRoutes().ServeHTTP(res, req)
 
 		assertStatus(t, res.Code, http.StatusOK)
-		assertResponseBody(t, res.Body.String(), "Coffee 1" )
+		assertResponseBody(t, res.Body.String(), "Coffee 1")
+	})
+
+	t.Run("create a journal entry", func(t *testing.T) {
+		req, _ := http.NewRequest(http.MethodPost, "/entries", nil)
+		res := httptest.NewRecorder()
+
+		s.RegisterRoutes().ServeHTTP(res, req)
+		assertStatus(t, res.Code, http.StatusCreated)
 	})
 }
 
