@@ -15,7 +15,7 @@ func (s *Server) RegisterRoutes() http.Handler {
 
 	e := &entries.Handler{}
 	mux.HandleFunc("GET /entries/{id}", e.FindByID)
-	mux.HandleFunc("POST /entries/", e.Create)
+	mux.HandleFunc("POST /entries", e.Create)
 
 	// Wrap the mux with CORS middleware
 	return s.corsMiddleware(mux)

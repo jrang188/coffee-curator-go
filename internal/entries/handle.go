@@ -11,11 +11,10 @@ type Handler struct{}
 func (h *Handler) Create(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusCreated)
 	log.Println("received request to create a entry")
-	status, err := w.Write([]byte("Entry created!"))
+	_, err := w.Write([]byte("Entry created!"))
 	if err != nil {
 		log.Printf("Failed to create entry %v", err)
 	}
-	log.Println(status)
 }
 
 func (h *Handler) FindByID(w http.ResponseWriter, r *http.Request) {

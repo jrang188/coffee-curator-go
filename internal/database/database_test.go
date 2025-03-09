@@ -1,4 +1,6 @@
-package test
+// +build integration
+
+package database_test
 
 import (
 	"context"
@@ -54,6 +56,7 @@ func mustStartPostgresContainer() (func(context.Context, ...testcontainers.Termi
 
 	return dbContainer.Terminate, err
 }
+
 
 func TestMain(m *testing.M) {
 	teardown, err := mustStartPostgresContainer()

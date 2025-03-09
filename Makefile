@@ -31,13 +31,15 @@ docker-down:
 	fi
 
 # Test the application
-test:
+test: itest utest
 	@echo "Testing..."
-	@go test ./... -v
 # Integrations Tests for the application
 itest:
 	@echo "Running integration tests..."
-	@go test ./internal/database -v
+	@go test ./... -tags=integration
+utest:
+	@echo "Running unit tests..."
+	@go test ./... -short
 
 # Clean the binary
 clean:
