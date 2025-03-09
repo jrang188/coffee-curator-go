@@ -2,6 +2,7 @@ package server
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 )
@@ -11,8 +12,10 @@ func (s *Server) RegisterRoutes() http.Handler {
 
 	// Register routes
 	mux.HandleFunc("/", s.HelloWorldHandler)
-
 	mux.HandleFunc("/health", s.healthHandler)
+
+	// Routes for Entries
+	mux.HandleFunc("GET /entries/{id}", s.EntryHandler)
 
 	// Wrap the mux with CORS middleware
 	return s.corsMiddleware(mux)
@@ -48,6 +51,12 @@ func (s *Server) HelloWorldHandler(w http.ResponseWriter, r *http.Request) {
 	if _, err := w.Write(jsonResp); err != nil {
 		log.Printf("Failed to write response: %v", err)
 	}
+}
+
+func (s *Server) EntryHandler(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusOK)
+	res := "Coffee " + r.PathValue("id")
+	fmt.Fprint(w, res)
 }
 
 func (s *Server) healthHandler(w http.ResponseWriter, r *http.Request) {

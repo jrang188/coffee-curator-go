@@ -28,10 +28,23 @@ func TestHelloWorldHandler(t *testing.T) {
 	assertResponseBody(t, expected, string(body))
 }
 
+func TestEntries(t *testing.T) {
+	t.Run("returns the journal entry with ID 1", func(t *testing.T) {
+		req, _ := http.NewRequest(http.MethodGet, "/entries/1", nil)
+		res := httptest.NewRecorder()
+
+		s := &server.Server{}
+		s.RegisterRoutes().ServeHTTP(res, req)
+
+		assertStatus(t, res.Code, http.StatusOK)
+		assertResponseBody(t, res.Body.String(), "Coffee 1" )
+	})
+}
+
 func assertStatus(t testing.TB, got, want int) {
 	t.Helper()
 	if got != want {
-		t.Errorf("response status is wrong, got %q, want %q", got, want)
+		t.Errorf("response status is wrong, got %v, want %v", got, want)
 	}
 }
 
