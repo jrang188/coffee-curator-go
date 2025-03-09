@@ -1,7 +1,6 @@
-package server_test
+package test
 
 import (
-	"io"
 	"net/http"
 	"net/http/httptest"
 	"testing"

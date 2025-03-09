@@ -1,4 +1,4 @@
-package database
+package test
 
 import (
 	"context"
@@ -9,6 +9,8 @@ import (
 	"github.com/testcontainers/testcontainers-go"
 	"github.com/testcontainers/testcontainers-go/modules/postgres"
 	"github.com/testcontainers/testcontainers-go/wait"
+
+	database "coffee-curator-go/internal/database"
 )
 
 func mustStartPostgresContainer() (func(context.Context, ...testcontainers.TerminateOption) error, error) {
@@ -33,9 +35,9 @@ func mustStartPostgresContainer() (func(context.Context, ...testcontainers.Termi
 		return nil, err
 	}
 
-	database = dbName
-	password = dbPwd
-	username = dbUser
+	database.SetDatabase(dbName)
+	database.SetPassword(dbPwd)
+	database.SetUsername(dbUser)
 
 	dbHost, err := dbContainer.Host(context.Background())
 	if err != nil {
@@ -47,8 +49,8 @@ func mustStartPostgresContainer() (func(context.Context, ...testcontainers.Termi
 		return dbContainer.Terminate, err
 	}
 
-	host = dbHost
-	port = dbPort.Port()
+	database.SetHost(dbHost)
+	database.SetPort(dbPort.Port())
 
 	return dbContainer.Terminate, err
 }
@@ -67,14 +69,14 @@ func TestMain(m *testing.M) {
 }
 
 func TestNew(t *testing.T) {
-	srv := New()
+	srv := database.New()
 	if srv == nil {
 		t.Fatal("New() returned nil")
 	}
 }
 
 func TestHealth(t *testing.T) {
-	srv := New()
+	srv := database.New()
 
 	stats := srv.Health()
 
@@ -92,7 +94,7 @@ func TestHealth(t *testing.T) {
 }
 
 func TestClose(t *testing.T) {
-	srv := New()
+	srv := database.New()
 
 	if srv.Close() != nil {
 		t.Fatalf("expected Close() to return nil")

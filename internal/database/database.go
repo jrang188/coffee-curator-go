@@ -38,6 +38,66 @@ var (
 	dbInstance *service
 )
 
+// SetDatabase sets the database name.
+func SetDatabase(val string) {
+	database = val
+}
+
+// SetPassword sets the database password.
+func SetPassword(val string) {
+	password = val
+}
+
+// SetUsername sets the database username.
+func SetUsername(val string) {
+	username = val
+}
+
+// SetPort sets the database port.
+func SetPort(val string) {
+	port = val
+}
+
+// SetHost sets the database host.
+func SetHost(val string) {
+	host = val
+}
+
+// SetSchema sets the database schema.
+func SetSchema(val string) {
+	schema = val
+}
+
+// GetDatabase returns the current database name.
+func GetDatabase() string {
+	return database
+}
+
+// GetPassword returns the current database password.
+func GetPassword() string {
+	return password
+}
+
+// GetUsername returns the current database username.
+func GetUsername() string {
+	return username
+}
+
+// GetPort returns the current database port.
+func GetPort() string {
+	return port
+}
+
+// GetHost returns the current database host.
+func GetHost() string {
+	return host
+}
+
+// GetSchema returns the current database schema.
+func GetSchema() string {
+	return schema
+}
+
 func New() Service {
 	// Reuse Connection
 	if dbInstance != nil {
