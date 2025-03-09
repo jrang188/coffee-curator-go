@@ -1,14 +1,16 @@
-package server
+package server_test
 
 import (
 	"io"
 	"net/http"
 	"net/http/httptest"
 	"testing"
+
+	server "coffee-curator-go/internal/server"
 )
 
-func TestHandler(t *testing.T) {
-	s := &Server{}
+func TestHelloWorldHandler(t *testing.T) {
+	s := &server.Server{}
 	server := httptest.NewServer(http.HandlerFunc(s.HelloWorldHandler))
 	defer server.Close()
 	resp, err := http.Get(server.URL)
@@ -17,15 +19,25 @@ func TestHandler(t *testing.T) {
 	}
 	defer resp.Body.Close()
 	// Assertions
-	if resp.StatusCode != http.StatusOK {
-		t.Errorf("expected status OK; got %v", resp.Status)
-	}
+	assertStatus(t, resp.StatusCode, http.StatusOK)
 	expected := "{\"message\":\"Hello World\"}"
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 		t.Fatalf("error reading response body. Err: %v", err)
 	}
-	if expected != string(body) {
-		t.Errorf("expected response body to be %v; got %v", expected, string(body))
+	assertResponseBody(t, expected, string(body))
+}
+
+func assertStatus(t testing.TB, got, want int) {
+	t.Helper()
+	if got != want {
+		t.Errorf("response status is wrong, got %q, want %q", got, want)
+	}
+}
+
+func assertResponseBody(t testing.TB, got, want string) {
+	t.Helper()
+	if got != want {
+		t.Errorf("response body is wrong, got %q, want %q", got, want)
 	}
 }
