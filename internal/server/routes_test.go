@@ -9,25 +9,6 @@ import (
 	server "coffee-curator-go/internal/server"
 )
 
-func TestHelloWorldHandler(t *testing.T) {
-	s := &server.Server{}
-	server := httptest.NewServer(http.HandlerFunc(s.HelloWorldHandler))
-	defer server.Close()
-	resp, err := http.Get(server.URL)
-	if err != nil {
-		t.Fatalf("error making request to server. Err: %v", err)
-	}
-	defer resp.Body.Close()
-	// Assertions
-	assertStatus(t, resp.StatusCode, http.StatusOK)
-	expected := "{\"message\":\"Hello World\"}"
-	body, err := io.ReadAll(resp.Body)
-	if err != nil {
-		t.Fatalf("error reading response body. Err: %v", err)
-	}
-	assertResponseBody(t, expected, string(body))
-}
-
 func TestEntries(t *testing.T) {
 	s := &server.Server{}
 	t.Run("returns the journal entry with ID 1", func(t *testing.T) {
